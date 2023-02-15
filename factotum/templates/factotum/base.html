@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'factotum/css/bootstrap.min.css' %}">
+</head>
+<body>
+    <header>
+        <div class="d-flex border-bottom mt-2 ml-2 mb-2 justify-content-between">
+            <a href="{% url "index" %}">
+                <img src="{% static "factotum/img/logo.png" %}">
+            </a>
+
+            <div class="d-flex">
+
+                {% if not user.is_authenticated %}
+                    <a href="{% url "login" %}" class="align-self-center">
+                        <h5 class="text-dark pr-5">Se connecter</h5>
+                    </a>
+                {% else %}
+                    <a href="{% url "logout" %}" class="align-self-center">
+                        <h5 class="text-dark pr-5">Se déconnecter</h5>
+                    </a>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    <a href="{% url "profil" %}" class="align-self-center">
+                        <h5 class="text-dark pr-5">Profil de {{ user.username }}</h5>
+                    </a>
+                {% endif %}
+            </div>
+
+        </div>
+    </header>
+
+    <main>
+        {% if user.is_authenticated %}
+            <div>
+                <label for="services">Choisissez un service</label>
+                <select name="services" id="services">
+                    <option value="serv1">Charpentier</option>
+                    <option value="serv2">Électricien</option>
+                    <option value="serv3">Plombier</option>
+                    <option value="serv4">Entretien Ménager</option>
+                    <option value="serv5">Entretien paysager</option>
+                </select>
+            </div>
+        {% endif %}
+
+        {% block content %}
+
+        {% endblock %}
+    </main>
+
+    <footer>
+
+    </footer>
+</body>
+</html>

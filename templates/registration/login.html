@@ -1,0 +1,35 @@
+{% extends "../factotum/base.html" %}
+
+{% block content %}
+    <form method="POST" novalidate>
+        {% csrf_token %}
+
+        <div class="d-flex flex-column">
+
+            {% if form.errors %}
+                <div class="text-danger">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+
+            {% for field in form.visible_fields %}
+                <div>
+                    <div class="text-danger">
+                        {{ field.errors }}
+                    </div>
+
+                    {# comment ajouter message validation si donné erronée #}
+
+                    <label class="text-dark" for="{{ field.id_for_label }}">
+                        {{ field.label_tag }}
+                    </label>
+
+                    {{ field }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <input type="submit" value="Soumettre">
+    </form>
+    <a href="{% url "register" %}">s'inscrire</a>
+{% endblock %}

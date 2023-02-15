@@ -1,0 +1,32 @@
+{% extends "../factotum/base.html" %}
+
+{% block content %}
+    <form method="POST" novalidate enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="d-flex flex-column">
+            {% for field in form.visible_fields %}
+                <div>
+                    <div class="text-danger">
+                        {{ field.errors }}
+                    </div>
+
+                    {% if messages and field.label == "Email" %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li {% if message.tags %} class="{{ message.tags }} text-danger"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <label class="text-dark" for="{{ field.id_for_label }}">
+                        {{ field.label_tag }}
+                    </label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+        </div>
+
+
+        <input type="submit" value="S'inscrire">
+    </form>
+{% endblock %}
