@@ -7,39 +7,42 @@
     <link rel="stylesheet" href="{% static 'factotum/css/bootstrap.min.css' %}">
 </head>
 <body>
-    <header>
-        <div class="d-flex border-bottom mt-2 ml-2 mb-2 justify-content-between">
-            <a href="{% url "index" %}">
-                <img src="{% static "factotum/img/logo.png" %}">
-            </a>
+<header>
+    <div class="d-flex border-bottom mt-2 ml-2 mb-2 justify-content-between">
+        <a href="{% url "index" %}">
+            <img src="{% static "factotum/img/logo.png" %}">
+        </a>
 
-            <div class="d-flex">
+        <div class="d-flex">
 
-                {% if not user.is_authenticated %}
-                    <a href="{% url "login" %}" class="align-self-center">
-                        <h5 class="text-dark pr-5">Se connecter</h5>
-                    </a>
-                {% else %}
-                    <a href="{% url "logout" %}" class="align-self-center">
-                        <h5 class="text-dark pr-5">Se déconnecter</h5>
-                    </a>
-                {% endif %}
+            {% if not user.is_authenticated %}
+                <a href="{% url "login" %}" class="align-self-center">
+                    <h5 class="text-dark pr-5">Se connecter</h5>
+                </a>
+            {% else %}
+                <a href="{% url "logout" %}" class="align-self-center">
+                    <h5 class="text-dark pr-5">Se déconnecter</h5>
+                </a>
+            {% endif %}
 
-                {% if user.is_authenticated %}
-                    <a href="{% url "profil" %}" class="align-self-center">
-                        <h5 class="text-dark pr-5">Profil de {{ user.username }}</h5>
-                    </a>
-                {% endif %}
-            </div>
-
+            {% if user.is_authenticated %}
+                <a href="{% url "profil" %}" class="align-self-center">
+                    <h5 class="text-dark pr-5">Profil de {{ user.username }}</h5>
+                </a>
+            {% endif %}
         </div>
-    </header>
 
-    <main>
-        {% if user.is_authenticated %}
+    </div>
+</header>
+
+<main>
+    <h2>Prendre soin de votre maison, en toute simplicité!</h2>
+    {% if user.is_authenticated %}
+
+        <form method="GET">
             <div>
                 <label for="services">Choisissez un service</label>
-                <select name="services" id="services">
+                <select name="services" id="services" required>
                     <option value="serv1">Charpentier</option>
                     <option value="serv2">Électricien</option>
                     <option value="serv3">Plombier</option>
@@ -47,15 +50,26 @@
                     <option value="serv5">Entretien paysager</option>
                 </select>
             </div>
-        {% endif %}
 
-        {% block content %}
+            <div>
+                <label for="code_postal">Code Postal</label>
+                <input type="text" value="" name="code_postal" id="code_postal" required>
+            </div>
 
-        {% endblock %}
-    </main>
+            <div>
+                <a href="#" class="button btn-primary">Rechercher</a>
+            </div>
+        </form>
 
-    <footer>
+    {% endif %}
 
-    </footer>
+    {% block content %}
+
+    {% endblock %}
+</main>
+
+<footer>
+
+</footer>
 </body>
 </html>
