@@ -1,5 +1,62 @@
 {% extends "factotum/base.html" %}
 
 {% block content %}
-    <h5>Page profil</h5>
+    <div class="d-flex w-100 border-top border-secondary">
+        <div class="d-flex bg-light w-25 justify-content-center align-items-center">
+            <img src="{{ user.avatar.url }}" class="img-fluid rounded-circle">
+        </div>
+        <div class="bg-light w-75 d-flex w-100">
+            <div class="bg-light w-50">
+                <h4 class="w-100 border-bottom pt-1 pb-1">Info du compte</h4>
+                {% if user.role == 2 %}
+                    <p>*note</p>
+                {% endif %}
+                <p>Pseudo - {{ user.username }}</p>
+                <p>Nom - {{ user.first_name }} {{ user.last_name }}</p>
+
+            </div>
+            <div class="bg-light w-50">
+                <h4 class="w-100 border-bottom pt-1 pb-1">Me Contacter</h4>
+                <p>Email - {{ user.email }}</p>
+                <p>Téléphone - {{ user.telephone }}</p>
+                <p>Adresse - {{ user.adresse }}</p>
+                <p>Code postal - {{ user.code_Postal }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <table class="bg-light mt-2">
+            <thead class="border-bottom border-secondary">
+            <tr>
+                <th><h4>Soumissions</h4></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                {% for soumission in soumissisons %}
+                    {% if soumission.utilisateur_id == user.id %}
+                        <td>{{ soumission.date_planification }}</td>
+                        <td>{{ soumission.date_finis }}</td>
+                        <td>{{ soumission.utilisateur_id.first_name }}</td>
+                        <td>{{ soumission.utilisateur_id.last_name }}</td>
+                        <td>{{ soumission.utilisateur_id.telephone }}</td>
+                        <td>{{ soumission.id_service_Professionnel_id.nom }}</td>
+                        <td>{{ soumission.description }}</td>
+                        <td>{{ soumission.etat }}</td>
+                        <td>
+                            <a href="#">Annuler</a>
+                            {% if soumission.date_finis != "" %}
+                                <a href="#">Noter</a>
+                            {% endif %}
+                        </td>
+                    {% else %}
+                        <td>Vous n'avez aucune soumission</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

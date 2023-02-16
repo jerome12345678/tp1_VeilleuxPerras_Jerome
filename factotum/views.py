@@ -1,8 +1,11 @@
+from distutils.command import upload
+
 from django.core.exceptions import ValidationError
+from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 from .forms import RegisterForm
-from .models import User
+from .models import User, Soumission
 from django.contrib import messages
 
 
@@ -11,13 +14,13 @@ def index (request):
     return render(request, 'factotum/base.html')
 
 def profil(request):
-    return render(request, 'factotum/profil_details.html')
+    soumissions = Soumission.objects.all()
+    return render(request, 'factotum/profil_details.html', {'soumissisons': soumissions})
 
 
 def register(request):
     if request.method == "POST":
         form = RegisterForm(data=request.POST, files=request.FILES)
-
         if form.data['email'] != "":
             adresse = User.objects.filter(email=form.data['email'])
 

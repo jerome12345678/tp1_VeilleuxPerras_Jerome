@@ -38,26 +38,34 @@
 <main>
     <h2>Prendre soin de votre maison, en toute simplicité!</h2>
     {% if user.is_authenticated %}
+        <form method="GET" class="d-flex bg-light p-3 mb-2 border border-secondary">
+            <div class="d-flex flex-column">
+                <div>
+                    <label for="services">Choisissez un service</label>
+                </div>
+                <div>
+                    <select name="services" id="services" required>
+                        <option value="serv1">Charpentier</option>
+                        <option value="serv2">Électricien</option>
+                        <option value="serv3">Plombier</option>
+                        <option value="serv4">Entretien Ménager</option>
+                        <option value="serv5">Entretien paysager</option>
+                    </select>
+                </div>
+            </div>
 
-        <form method="GET">
-            <div>
-                <label for="services">Choisissez un service</label>
-                <select name="services" id="services" required>
-                    <option value="serv1">Charpentier</option>
-                    <option value="serv2">Électricien</option>
-                    <option value="serv3">Plombier</option>
-                    <option value="serv4">Entretien Ménager</option>
-                    <option value="serv5">Entretien paysager</option>
-                </select>
+            <div class="d-flex flex-column">
+                <div>
+                    <label for="code_postal">Code Postal</label>
+                </div>
+                <div>
+                    <input type="text" value="" name="code_postal" id="code_postal" required>
+                </div>
             </div>
 
             <div>
-                <label for="code_postal">Code Postal</label>
-                <input type="text" value="" name="code_postal" id="code_postal" required>
-            </div>
-
-            <div>
-                <a href="#" class="button btn-primary">Rechercher</a>
+                {# bouton qui affiche les professionnels correspondant #}
+                <a href="#" class="button btn-primary p-1 rounded">Rechercher</a>
             </div>
         </form>
 

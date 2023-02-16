@@ -26,10 +26,12 @@ class User(AbstractUser):
     adresse = models.CharField(max_length=255)
     code_Postal = models.CharField(max_length=6,
                                    validators=[RegexValidator("[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJ-NPRSTV-Z][ ]?|[-]?[0-9][ABCEGHJ-NPRSTV-Z][0-9]",
-                                                              'Code postal invalide')],)
+                                                              'Code postal invalide - assurez-vous que celui-ci soit en majuscule et qu\'il n\'ait aucune espace')],)
     description = models.TextField(blank=True)
-    avatar = models.ImageField(upload_to="media/")
+    avatar = models.ImageField(upload_to='media/images/', blank=True, null=True)
     Service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True)
+    telephone = models.CharField(max_length=10, default="", null=False, validators=[RegexValidator("^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$",
+                                                            'Numéro de téléphone invalide')])
 
     def __str__(self):
         return '%s : %s' % (self.username, self.id)
@@ -62,7 +64,7 @@ class Soumission(models.Model):
         (TERMINEE, 'finished'),
         (ANNULEE, 'cancelled')
     )
-    role = models.PositiveSmallIntegerField(choices=STATE_CHOICE)
+    etat = models.PositiveSmallIntegerField(choices=STATE_CHOICE)
 
     def __str__(self):
         return '%s : %s : %s : %s : %s' % (self.id_service_Professionnel,

@@ -13,7 +13,8 @@
                     {% if messages and field.label == "Email" %}
                         <ul class="messages">
                             {% for message in messages %}
-                                <li {% if message.tags %} class="{{ message.tags }} text-danger"{% endif %}>{{ message }}</li>
+                                <li {% if message.tags %}
+                                    class="{{ message.tags }} text-danger"{% endif %}>{{ message }}</li>
                             {% endfor %}
                         </ul>
                     {% endif %}
@@ -22,6 +23,11 @@
                         {{ field.label_tag }}
                     </label>
                     {{ field }}
+
+{#                    {% if field.label == "Image" %}#}
+{#                        <img src="/media/{{ modele.image }}" class="img-fluid">#}
+{#                    {% endif %}#}
+
                 </div>
             {% endfor %}
         </div>
