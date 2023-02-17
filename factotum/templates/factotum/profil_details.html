@@ -23,8 +23,21 @@
                 <p>Code postal - {{ user.code_Postal }}</p>
             </div>
             {% if user.role == 2 %}
-                <div class="bg-light w-25">
-                    <a href="{% url "ajout_service" %}" class="button btn-secondary rounded p-2">Ajouter un service</a>
+                <div class="bg-light w-50 pl-2 border-left">
+                    <div class="d-flex flex-column">
+                        <div class="d-flex">
+                            <h4 class="pt-1 pb-1">Vos services actuels</h4>
+                            <a href="{% url "ajout_service" user.id %}" class="button btn-secondary rounded p-2 ml-4 mt-2">
+                                Ajouter un service</a>
+                        </div>
+                        <div class="">
+                            {% for service in user_services %}
+                                <p>{{ service.service_id.nom }}</p>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+
                 </div>
             {% endif %}
 

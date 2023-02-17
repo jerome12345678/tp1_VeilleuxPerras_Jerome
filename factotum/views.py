@@ -5,7 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 from .forms import RegisterForm, SearchProfessionnal, AjoutServiceProfessionnel
-from .models import User, Soumission, ProfessionnelService
+from .models import User, Soumission, ProfessionnelService, Service
 from django.contrib import messages
 
 
@@ -16,7 +16,9 @@ def index(request):
 
 def profil(request):
     soumissions = Soumission.objects.all()
-    return render(request, 'factotum/profil_details.html', {'soumissisons': soumissions})
+    services = ProfessionnelService.objects.filter(utilisateur_id=request.user.id)
+
+    return render(request, 'factotum/profil_details.html', {'soumissisons': soumissions, 'user_services': services})
 
 
 def register(request):
@@ -53,6 +55,7 @@ def liste_professionnel(request):
 
         service = request.POST['services']
         code_postal = request.POST['code_postal']
+        print(code_postal)
 
         for servicePro in servicesPro:
             if servicePro.service_id.nom == service:
@@ -66,16 +69,24 @@ def liste_professionnel(request):
     return render(request, 'factotum/professionnel_list.html', {'form': form})
 
 
-def ajout_service(request):
+def ajout_service(request, user_id):
     if request.method == "POST":
         form = AjoutServiceProfessionnel(data=request.POST)
 
-        service = request.POST['services']
-        user_id =
+        #if form.is_valid():
 
-        return render(request, 'factotum/professionnel_list.html', {'professionnels': professionnels})
+        a = request.POST['services']
+        taux_horaire = request.POST['taux_horaire']
+
+        service = Service.objects.get(id=int(a))
+        user = User.objects.get(id=request.user.id)
+
+        ProfessionnelService.objects.create(taux_horaire=taux_horaire, service_id_id=service.id, utilisateur_id=user)
+
+        services = ProfessionnelService.objects.filter(utilisateur_id=request.user.id)
+        return render(request, 'factotum/profil_details.html', {'user_services': services})
 
     else:
         form = AjoutServiceProfessionnel()
 
-    return render(request, 'factotum/professionnel_list.html', {'form': form})
+    return render(request, 'factotum/serviceProfessionnel_new.html', {'form': form})

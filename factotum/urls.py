@@ -10,5 +10,5 @@ urlpatterns = [
     path('accounts/register/', views.register, name="register"),
     path('recherche/', views.recherche, name="recherche"),
     path('professionnel/list/', views.liste_professionnel, name="liste_professionnel"),
-    path('professionnel_service/new', views.ajout_service, name="ajout_service")
+    path('professionnel_service/new/<int:user_id>', views.ajout_service, name="ajout_service")
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

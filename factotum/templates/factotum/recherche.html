@@ -1,8 +1,18 @@
 {% extends "factotum/base.html" %}
 
 {% block content %}
-    <form method="POST" class="d-flex bg-light p-3 mb-2 border border-secondary"  action="{% url "liste_professionnel" %}">
+    <form method="POST" class="d-flex bg-light p-3 mb-2 border border-secondary"
+          action="{% url "liste_professionnel" %}">
         {% csrf_token %}
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
         <div class="d-flex flex-column">
             <div>
                 <label for="services">Choisissez un service</label>

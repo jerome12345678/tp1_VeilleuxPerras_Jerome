@@ -1,11 +1,19 @@
 {% extends "factotum/base.html" %}
 
 {% block content %}
-    <h1>liste...</h1>
-    {% for professionnel in professionnels %}
-        <div>
-            <img src="{{ professionnel.utilisateur_id.avatar.url }}" class="img-fluid rounded-circle">
-            <h4>{{ professionnel.utilisateur_id.username }}</h4>
-        </div>
-    {% endfor %}
+    <div class="d-flex w-100 col-10 offset-1">
+        {% for professionnel in professionnels %}
+            <div class="d-flex border border-secondary bg-light p-3 w-50 col-6 m-2">
+                <img src="{{ professionnel.utilisateur_id.avatar.url }}" class="img-fluid rounded-circle w-25">
+                <div class="d-flex w-75 border-left border-secondary ml-3">
+                    <div class="d-flex pl-3 flex-column">
+                        <h5>*note</h5>
+                        <h5>{{ professionnel.utilisateur_id.first_name }} {{ professionnel.utilisateur_id.last_name }}</h5>
+                        <h5>*distance</h5>
+                        <h5>Taux - {{ professionnel.taux_horaire }}$ / heure</h5>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

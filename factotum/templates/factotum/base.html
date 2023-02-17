@@ -37,10 +37,10 @@
 
 <main>
     <div class="d-flex flex-column mb-2 bg-dark border border-secondary">
-        <h2 class="d-flex justify-content-center text-white">Prendre soin de votre maison, en toute simplicité!</h2>
+        <h2 class="d-flex justify-content-center text-white pt-3 pb-3">Prendre soin de votre maison, en toute simplicité!</h2>
         <div class="d-flex justify-content-center mb-2">
             {% if user.is_authenticated %}
-                <a href="{% url "recherche" %}" class="button btn-secondary rounded p-2">Commencer une recherche</a>
+                <a href="{% url "recherche" %}" class="button btn-secondary rounded p-2 ">Commencer une recherche</a>
             {% endif %}
         </div>
     </div>
