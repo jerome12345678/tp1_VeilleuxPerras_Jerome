@@ -6,11 +6,19 @@
             <div class="d-flex border border-secondary bg-light p-3 w-50 col-6 m-2">
                 <img src="{{ professionnel.utilisateur_id.avatar.url }}" class="img-fluid rounded-circle w-25">
                 <div class="d-flex w-75 border-left border-secondary ml-3">
-                    <div class="d-flex pl-3 flex-column">
-                        <h5>*note</h5>
-                        <h5>{{ professionnel.utilisateur_id.first_name }} {{ professionnel.utilisateur_id.last_name }}</h5>
-                        <h5>*distance</h5>
-                        <h5>Taux - {{ professionnel.taux_horaire }}$ / heure</h5>
+                    <div class="d-flex pl-3 w-100 justify-content-between">
+                        <div class="d-flex flex-column">
+                            <h4>{{ professionnel.utilisateur_id.first_name }} {{ professionnel.utilisateur_id.last_name }}</h4>
+                            <h5>*note</h5>
+                            <h5>*distance</h5>
+                            <h5>Taux - {{ professionnel.taux_horaire }}$ / heure</h5>
+                        </div>
+                        <div>
+                            {# passe id de l'utilisateur et du professionnel #}
+                            {#                            {% url "#" user.id professionnel.utilisateur_id.id %}#}
+                            <a href="#"
+                               class="button btn-secondary rounded p-2">Voir Profile</a>
+                        </div>
                     </div>
                 </div>
             </div>

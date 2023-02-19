@@ -45,10 +45,8 @@ def recherche(request):
 
 
 def liste_professionnel(request):
-
     servicesPro = ProfessionnelService.objects.all()
     professionnels = []
-
 
     if request.method == "POST":
         form = SearchProfessionnal(data=request.POST)
@@ -73,18 +71,18 @@ def ajout_service(request, user_id):
     if request.method == "POST":
         form = AjoutServiceProfessionnel(data=request.POST)
 
-        #if form.is_valid():
+        if form.is_valid():
+            a = request.POST['services']
+            taux_horaire = request.POST['taux_horaire']
 
-        a = request.POST['services']
-        taux_horaire = request.POST['taux_horaire']
+            service = Service.objects.get(id=int(a))
+            user = User.objects.get(id=request.user.id)
 
-        service = Service.objects.get(id=int(a))
-        user = User.objects.get(id=request.user.id)
+            ProfessionnelService.objects.create(taux_horaire=taux_horaire, service_id_id=service.id,
+                                                utilisateur_id=user)
 
-        ProfessionnelService.objects.create(taux_horaire=taux_horaire, service_id_id=service.id, utilisateur_id=user)
-
-        services = ProfessionnelService.objects.filter(utilisateur_id=request.user.id)
-        return render(request, 'factotum/profil_details.html', {'user_services': services})
+            services = ProfessionnelService.objects.filter(utilisateur_id=request.user.id)
+            return render(request, 'factotum/profil_details.html', {'user_services': services})
 
     else:
         form = AjoutServiceProfessionnel()
