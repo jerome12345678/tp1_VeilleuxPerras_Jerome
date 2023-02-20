@@ -14,9 +14,14 @@ def index(request):
 
 def profil(request):
     soumissions = Soumission.objects.all()
+    soumission = []
+    for item in soumissions:
+        if item.id_service_Professionnel.utilisateur_id.id == request.user.id:
+            soumission.append(item)
+
     services = ProfessionnelService.objects.filter(utilisateur_id=request.user.id)
 
-    return render(request, 'factotum/profil_details.html', {'soumissisons': soumissions, 'user_services': services})
+    return render(request, 'factotum/profil_details.html', {'soumissions': soumission, 'user_services': services})
 
 
 def register(request):
@@ -41,26 +46,21 @@ def register(request):
 def liste_professionnel(request):
     list_pro = []
     api_key = settings.API_KEY
+    allServices = Service.objects.all()
+
 
     if request.method == "POST":
         form = SearchProfessionnal(request.POST)
-        service = request.POST['services']
-        services = Service.objects.all()
-        id = 0
-        for item in services:
-            if service == item.nom:
-                id = item.id
+        a = request.POST['services']
+        service = Service.objects.get(id=a)
+
 
         code_postal = request.POST['code_postal']
 
         if form.is_valid():
-            servicesPro = ProfessionnelService.objects.filter(service_id=id)
-            # for servicePro in servicesPro:
-            #     if servicePro.service_id.nom == service:
-            #         professionnels.append(servicePro)
+            servicesPro = ProfessionnelService.objects.filter(service_id=service)
 
             for pro in servicesPro:
-                # pro = User.objects.get(id=servicePro.utilisateur_id.id)
                 res = urllib.request.urlopen(
                     'http://www.zipcodeapi.com/rest/v2/CA/' + api_key + '/distance.json/' + code_postal.replace(
                         ' ', '') + '/' + pro.utilisateur_id.code_Postal.replace(' ', '') + '/km')
@@ -73,35 +73,33 @@ def liste_professionnel(request):
 
                 list_pro.append(result)
 
-            #{'professionnels': professionnels, 'distances': distances}
             return render(request, 'factotum/professionnel_list.html', {'professionnels': list_pro})
 
     else:
         form = SearchProfessionnal()
 
-    return render(request, 'factotum/recherche.html', {'form': form})
+    return render(request, 'factotum/recherche.html', {'form': form, 'services': allServices})
 
 
 def ajout_service(request, user_id):
+    allServices = Service.objects.all()
     if request.method == "POST":
         form = AjoutServiceProfessionnel(request.POST)
         a = request.POST['services']
         taux_horaire = request.POST['taux_horaire']
 
         if form.is_valid():
-            service = Service.objects.get(id=int(a))
+            service = Service.objects.get(id=a)
             user = User.objects.get(id=request.user.id)
-
-            ProfessionnelService.objects.create(taux_horaire=taux_horaire, service_id_id=service.id,
+            ProfessionnelService.objects.create(taux_horaire=taux_horaire, service_id=service,
                                                 utilisateur_id=user)
-
             services = ProfessionnelService.objects.filter(utilisateur_id=request.user.id)
             return render(request, 'factotum/profil_details.html', {'user_services': services})
 
     else:
         form = AjoutServiceProfessionnel()
 
-    return render(request, 'factotum/serviceProfessionnel_new.html', {'form': form})
+    return render(request, 'factotum/serviceProfessionnel_new.html', {'form': form, 'allServices': allServices})
 
 
 def ajout_soumission(request):

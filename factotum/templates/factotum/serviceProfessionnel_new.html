@@ -10,12 +10,11 @@
             </div>
             <div>
                 <select name="services" id="services" required>
-                    <option value="1">Charpentier</option>
-                    <option value="2">Électricien</option>
-                    <option value="3">Plombier</option>
-                    <option value="4">Entretien Ménager</option>
-                    <option value="5">Entretien paysager</option>
+                    {% for service in allServices %}
+                        <option value="{{ service.id }}">{{ service.nom }}</option>
+                    {% endfor %}
                 </select>
+
             </div>
         </div>
 
@@ -24,7 +23,8 @@
                 <label for="taux_horaire">Taux Horaire</label>
             </div>
             <div>
-                <input type="text" name="taux_horaire" id="taux_horaire" required>
+                {{ form.taux_horaire }}
+{#                <input type="text" name="taux_horaire" id="taux_horaire" required>#}
             </div>
             <div class="text-danger">
                 {{ form.errors }}

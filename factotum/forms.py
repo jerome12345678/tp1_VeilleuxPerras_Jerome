@@ -15,25 +15,27 @@ class RegisterForm(UserCreationForm):
 
 class SearchProfessionnal(forms.Form):
     SERVICES = (
-        ('Charpentier', '1'),
-        ('Électricien', '2'),
-        ('Plombier', '3'),
-        ('EntretienMénager', '4'),
-        ('EntretienPaysager', '5'),
+        (1, 'Charpentier'),
+        (2, 'Électricien'),
+        (3, 'Plombier'),
+        (4, 'EntretienMénager'),
+        (5, 'EntretienPaysager'),
     )
-    services = forms.ChoiceField(choices=SERVICES)
+    services = forms.IntegerField()
     code_postal = forms.CharField(min_length=6, max_length=6, required=True)
 
 
 class AjoutServiceProfessionnel(forms.Form):
     SERVICES = (
-        ('Charpentier', '1'),
-        ('Électricien', '2'),
-        ('Plombier', '3'),
-        ('EntretienMénager', '4'),
-        ('EntretienPaysager', '5'),
+        (1, 'Charpentier'),
+        (2, 'Électricien'),
+        (3, 'Plombier'),
+        (4, 'EntretienMénager'),
+        (5, 'EntretienPaysager'),
     )
-    field = forms.ChoiceField(choices=SERVICES)
+    # services = forms.ChoiceField(choices=SERVICES)
+    services = forms.IntegerField()
+    #service vas devenir un integerfield
     taux_horaire = forms.IntegerField(required=True)
 
 

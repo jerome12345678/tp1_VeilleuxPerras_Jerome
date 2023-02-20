@@ -34,7 +34,7 @@ class User(AbstractUser):
                                                             'Numéro de téléphone invalide')])
 
     def __str__(self):
-        return '%s : %s' % (self.username, self.id)
+        return '%s' % (self.id)
 
 
 class ProfessionnelService(models.Model):
@@ -48,8 +48,8 @@ class ProfessionnelService(models.Model):
 
 class Soumission(models.Model):
     date_planification = models.DateField(auto_now_add=True)
-    date_finis = models.DateField()
-    description = models.TextField(blank=True)
+    date_finis = models.DateField(null=True)
+    description = models.TextField(null=False)
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE, null=False, default="")
     id_service_Professionnel = models.ForeignKey(ProfessionnelService, on_delete=models.CASCADE, null=False, default="")
     note = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])

@@ -11,11 +11,9 @@
             </div>
             <div>
                 <select name="services" id="services" required>
-                    <option value="Charpentier">Charpentier</option>
-                    <option value="Électricien">Électricien</option>
-                    <option value="Plombier">Plombier</option>
-                    <option value="Entretien Ménager">Entretien Ménager</option>
-                    <option value="Entretien paysager">Entretien paysager</option>
+                    {% for service in services %}
+                        <option value="{{ service.id }}">{{ service.nom }}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
