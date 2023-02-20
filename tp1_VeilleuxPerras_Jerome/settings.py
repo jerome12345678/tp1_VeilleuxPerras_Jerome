@@ -127,4 +127,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'factotum.User'
 LOGIN_REDIRECT_URL = '/factotum/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
+API_KEY = "E5otmqtkraNjQFt7iRem00qu0KdkPY9ge2tBYrJ983iWwij5gEXqP3Mtf8wOgaYx"
 

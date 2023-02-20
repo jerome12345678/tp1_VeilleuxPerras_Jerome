@@ -21,8 +21,8 @@ class SearchProfessionnal(forms.Form):
         ('EntretienMénager', '4'),
         ('EntretienPaysager', '5'),
     )
-    field = forms.ChoiceField(choices=SERVICES)
-    code_postal = forms.CharField(max_length=6, required=True)
+    services = forms.ChoiceField(choices=SERVICES)
+    code_postal = forms.CharField(min_length=6, max_length=6, required=True)
 
 
 class AjoutServiceProfessionnel(forms.Form):
