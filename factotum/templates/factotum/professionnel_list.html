@@ -10,13 +10,11 @@
                         <div class="d-flex flex-column">
                             <h4>{{ professionnel.0.utilisateur_id.first_name }} {{ professionnel.0.utilisateur_id.last_name }}</h4>
                             <h5>*note</h5>
-                            <h5>{{ professionnel.1.distance }} km</h5>
+                            <h5>{{ professionnel.1 }} km</h5>
                             <h5>Taux - {{ professionnel.0.taux_horaire }}$ / heure</h5>
                         </div>
                         <div>
-                            {# passe id de l'utilisateur et du professionnel #}
-                            {#                            {% url "#" user.id professionnel.utilisateur_id.id %}#}
-                            <a href="#"
+                            <a href="{% url "ajout_soumission" professionnel.0.utilisateur_id.id %}"
                                class="button btn-secondary rounded p-2">Voir Profile</a>
                         </div>
                     </div>

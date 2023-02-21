@@ -10,5 +10,5 @@ urlpatterns = [
     path('accounts/register/', views.register, name="register"),
     path('professionnel/list/', views.liste_professionnel, name="liste_professionnel"),
     path('professionnel_service/new/<int:user_id>', views.ajout_service, name="ajout_service"),
-    path('/soumission/<int:service_id>/new', views.ajout_soumission, name="ajout_soumission"),
+    path('soumission/<int:service_id>/new', views.ajout_soumission, name="ajout_soumission"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -47,8 +47,8 @@ class ProfessionnelService(models.Model):
 
 
 class Soumission(models.Model):
-    date_planification = models.DateField(auto_now_add=True)
-    date_finis = models.DateField(null=True)
+    date_planification = models.DateField(null=False)
+    date_finis = models.DateField(null=True, blank=True)
     description = models.TextField(null=False)
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE, null=False, default="")
     id_service_Professionnel = models.ForeignKey(ProfessionnelService, on_delete=models.CASCADE, null=False, default="")

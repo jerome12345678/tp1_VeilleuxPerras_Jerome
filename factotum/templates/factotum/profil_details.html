@@ -45,34 +45,95 @@
         </div>
     </div>
 
-    <table class="bg-light mt-2">
-        <thead class="border-bottom border-secondary">
-        <tr>
-            <th><h4>Soumissions</h4></th>
+    <table class="bg-light mt-3 w-100">
+        <thead class="border-bottom border-secondary w-100">
+        <tr class="d-flex flex-column">
+            <th><h4>Vos Demandes de Soumissions</h4></th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <div class="">
-                {% for soumission in soumissions %}
-                    <td class="p-2">{{ soumission.date_planification }}</td>
-                    <td class="p-2">{{ soumission.date_finis }}</td>
-                    <td class="p-2">{{ soumission.utilisateur_id.first_name }}</td>
-                    <td class="p-2">{{ soumission.utilisateur_id.last_name }}</td>
-                    <td class="p-2">{{ soumission.utilisateur_id.telephone }}</td>
-                    <td class="p-2">{{ soumission.id_service_Professionnel_id.nom }}</td>
-                    <td class="p-2">{{ soumission.description }}</td>
-                    <td class="p-2">{{ soumission.etat }}</td>
+        <tr class="d-flex flex-column">
+        <tr class="border-bottom border-secondary">
+            <td class="border-left border-secondary">Date planification</td>
+            <td class="border-left border-secondary">Date terminé</td>
+            <td class="border-left border-secondary">Prénom</td>
+            <td class="border-left border-secondary">Nom</td>
+            <td class="border-left border-secondary">Téléphone</td>
+            <td class="border-left border-secondary">Service</td>
+            <td class="border-left border-secondary">Description</td>
+            <td class="border-left border-secondary">État</td>
+        </tr>
+        {% for soumission in soumissions %}
+            <tr class="border-bottom border-secondary">
+                <td class="p-2 border-left">{{ soumission.date_planification }}</td>
+                <td class="p-2 border-left">
+                    {% if soumission.date_finis == None %}
+                        -----
+                    {% else %}
+                        {{ soumission.date_finis }}
+                    {% endif %}
+                </td>
+                <td class="p-2 border-left">{{ soumission.utilisateur.first_name }}</td>
+                <td class="p-2 border-left">{{ soumission.utilisateur.last_name }}</td>
+                <td class="p-2 border-left">{{ soumission.utilisateur.telephone }}</td>
+                <td class="p-2 border-left">{{ soumission.id_service_Professionnel.service_id.nom}}</td>
+                <td class="p-2 border-left">{{ soumission.description }}</td>
+                <td class="p-2 border-left border-right">{{ soumission.get_etat_display }}</td>
+                <td class="p-2">
+                    <a href="#">Annuler</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+
+    {% if user.role == 2 %}
+        <table class="bg-light mt-4 w-100">
+            <thead class="border-bottom border-secondary w-100">
+            <tr class="d-flex flex-column">
+                <th><h4>Vos Demandes effectuées</h4></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="d-flex flex-column">
+            <tr class="border-bottom border-secondary">
+                <td class="border-left border-secondary">Date planification</td>
+                <td class="border-left border-secondary">Date terminé</td>
+                <td class="border-left border-secondary">Prénom</td>
+                <td class="border-left border-secondary">Nom</td>
+                <td class="border-left border-secondary">Téléphone</td>
+                <td class="border-left border-secondary">Service</td>
+                <td class="border-left border-secondary">Description</td>
+                <td class="border-left border-secondary">État</td>
+            </tr>
+            {% for soumission in soumissionsDemande %}
+                <tr class="border-bottom border-secondary">
+                    <td class="p-2 border-left">{{ soumission.date_planification }}</td>
+                    <td class="p-2 border-left">
+                        {% if soumission.date_finis == None %}
+                            -----
+                        {% else %}
+                            {{ soumission.date_finis }}
+                        {% endif %}
+                    </td>
+                    <td class="p-2 border-left">{{ soumission.id_service_Professionnel.utilisateur_id.first_name }}</td>
+                    <td class="p-2 border-left">{{ soumission.id_service_Professionnel.utilisateur_id.last_name }}</td>
+                    <td class="p-2 border-left">{{ soumission.id_service_Professionnel.utilisateur_id.telephone }}</td>
+                    <td class="p-2 border-left">{{ soumission.id_service_Professionnel.service_id.nom }}</td>
+                    <td class="p-2 border-left">{{ soumission.description }}</td>
+                    <td class="p-2 border-left border-right">{{ soumission.get_etat_display }}</td>
                     <td class="p-2">
-                        <a href="#">Annuler</a>
-                        {% if soumission.date_finis != "" %}
+                        {% if soumission.date_finis != None %}
                             <a href="#">Noter</a>
                         {% endif %}
                     </td>
-                {% endfor %}
-            </div>
-        </tr>
+                </tr>
+            {% endfor %}
+            </tr>
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    {% endif %}
+
 {% endblock %}

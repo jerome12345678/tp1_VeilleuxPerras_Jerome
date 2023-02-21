@@ -1,4 +1,6 @@
 from django import forms
+
+from tp1_VeilleuxPerras_Jerome import settings
 from .models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -33,9 +35,13 @@ class AjoutServiceProfessionnel(forms.Form):
         (4, 'EntretienMénager'),
         (5, 'EntretienPaysager'),
     )
-    # services = forms.ChoiceField(choices=SERVICES)
     services = forms.IntegerField()
-    #service vas devenir un integerfield
     taux_horaire = forms.IntegerField(required=True)
+
+
+class AjoutSoumission(forms.Form):
+    date_planification = forms.DateField()
+    description = forms.CharField(widget=forms.Textarea, required=True)
+
 
 

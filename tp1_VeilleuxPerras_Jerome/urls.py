@@ -20,6 +20,7 @@ from django.urls import path, include
 from factotum import views
 
 urlpatterns = [
+    path('', include('factotum.urls')),
     path('admin/', admin.site.urls),
     path('factotum/', include("factotum.urls")),
     path('accounts/', include('django.contrib.auth.urls')),
