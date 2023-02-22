@@ -59,10 +59,10 @@ class Soumission(models.Model):
     TERMINEE = 3
     ANNULEE = 4
     STATE_CHOICE = (
-        (EN_ATTENTE, 'waiting'),
-        (ACCEPTEE, 'accepted'),
-        (TERMINEE, 'finished'),
-        (ANNULEE, 'cancelled')
+        (EN_ATTENTE, 'En Attente'),
+        (ACCEPTEE, 'Accepté'),
+        (TERMINEE, 'Terminé'),
+        (ANNULEE, 'Annulé')
     )
     etat = models.PositiveSmallIntegerField(choices=STATE_CHOICE)
 

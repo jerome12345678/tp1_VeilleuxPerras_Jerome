@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import RegisterForm, SearchProfessionnal, AjoutServiceProfessionnel, AjoutSoumission
@@ -65,19 +67,26 @@ def liste_professionnel(request):
             servicesPro = ProfessionnelService.objects.filter(service_id=service)
 
             for pro in servicesPro:
-                # res = urllib.request.urlopen('http://www.zipcodeapi.com/rest/v2/CA/' + api_key + '/distance.json/' + code_postal.replace(' ', '') + '/' + pro.utilisateur_id.code_Postal.replace(' ', '') + '/km')
-                # json_data = json.load(res)
-                # print(json_data)
-                #
-                # result = (
-                #     (pro, json_data['distance'])
-                # )
+
+                notes = Soumission.objects.filter(id_service_Professionnel=pro.utilisateur_id.id)
+                total = 0
+                for proNote in notes:
+                    total = total + proNote.note
+
+                res = urllib.request.urlopen('http://www.zipcodeapi.com/rest/v2/CA/' + api_key + '/distance.json/' + code_postal.replace(' ', '') + '/' + pro.utilisateur_id.code_Postal.replace(' ', '') + '/km')
+                json_data = json.load(res)
+
+                result = (
+                    (pro, json_data['distance'], total)
+                )
+
+                #result = (pro, 54)
 
                 list_pro.append(result)
                 list_pro.sort(key=lambda a: a[1])
 
-
-            return render(request, 'factotum/professionnel_list.html', {'professionnels': list_pro})
+            return render(request, 'factotum/professionnel_list.html',
+                          {'professionnels': list_pro})
 
     else:
         form = SearchProfessionnal()
@@ -130,4 +139,85 @@ def ajout_soumission(request, service_id):
 
     pro = ProfessionnelService.objects.get(utilisateur_id=service_id)
     return render(request, 'factotum/soumission_new.html', {'form': form, 'pro': pro})
+
+
+def accepter_soumission(request, soumission_id):
+    soumission = Soumission.objects.get(id=soumission_id)
+    soumission.etat = 2
+    soumission.save()
+
+    soumissions = Soumission.objects.all()
+    soumission = []
+    for item in soumissions:
+        if item.id_service_Professionnel.utilisateur_id.id == request.user.id:
+            soumission.append(item)
+
+    soumissionsDemande = Soumission.objects.filter(utilisateur_id=request.user.id)
+
+    services = ProfessionnelService.objects.filter(utilisateur_id=request.user.id)
+
+    return render(request, 'factotum/profil_details.html', {'soumissions': soumission,
+                                                            'soumissionsDemande': soumissionsDemande,
+                                                            'user_services': services})
+
+
+def terminer_soumission(request, soumission_id):
+    soumission = Soumission.objects.get(id=soumission_id)
+    soumission.etat = 3
+    soumission.date_finis = datetime.date.today()
+    soumission.save()
+
+    soumissions = Soumission.objects.all()
+    soumission = []
+    for item in soumissions:
+        if item.id_service_Professionnel.utilisateur_id.id == request.user.id:
+            soumission.append(item)
+
+    soumissionsDemande = Soumission.objects.filter(utilisateur_id=request.user.id)
+
+    services = ProfessionnelService.objects.filter(utilisateur_id=request.user.id)
+
+    return render(request, 'factotum/profil_details.html', {'soumissions': soumission,
+                                                            'soumissionsDemande': soumissionsDemande,
+                                                            'user_services': services})
+
+
+def annuler_soumission(request, soumission_id):
+    soumission = Soumission.objects.get(id=soumission_id)
+    soumission.etat = 4
+    soumission.save()
+
+    soumissions = Soumission.objects.all()
+    soumission = []
+    for item in soumissions:
+        if item.id_service_Professionnel.utilisateur_id.id == request.user.id:
+            soumission.append(item)
+
+    soumissionsDemande = Soumission.objects.filter(utilisateur_id=request.user.id)
+
+    services = ProfessionnelService.objects.filter(utilisateur_id=request.user.id)
+
+    return render(request, 'factotum/profil_details.html', {'soumissions': soumission,
+                                                            'soumissionsDemande': soumissionsDemande,
+                                                            'user_services': services})
+
+def noter_soumission(request, soumission_id):
+    soumission = Soumission.objects.get(id=soumission_id)
+    soumission.note = soumission.note + 1
+    soumission.save()
+
+    soumissions = Soumission.objects.all()
+    soumission = []
+    for item in soumissions:
+        if item.id_service_Professionnel.utilisateur_id.id == request.user.id:
+            soumission.append(item)
+
+    soumissionsDemande = Soumission.objects.filter(utilisateur_id=request.user.id)
+
+    services = ProfessionnelService.objects.filter(utilisateur_id=request.user.id)
+
+    return render(request, 'factotum/profil_details.html', {'soumissions': soumission,
+                                                            'soumissionsDemande': soumissionsDemande,
+                                                            'user_services': services})
+
 

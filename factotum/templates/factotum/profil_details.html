@@ -80,7 +80,9 @@
                 <td class="p-2 border-left">{{ soumission.description }}</td>
                 <td class="p-2 border-left border-right">{{ soumission.get_etat_display }}</td>
                 <td class="p-2">
-                    <a href="#">Annuler</a>
+                    <a href="{% url "accepter_soumission" soumission.id %}">Accepter</a>
+                    <a href="{% url "terminer_soumission" soumission.id %}">Terminer</a>
+                    <a href="{% url "annuler_soumission" soumission.id %}">Annuler</a>
                 </td>
             </tr>
         {% endfor %}
@@ -92,7 +94,7 @@
         <table class="bg-light mt-4 w-100">
             <thead class="border-bottom border-secondary w-100">
             <tr class="d-flex flex-column">
-                <th><h4>Vos Demandes effectuées</h4></th>
+                <th><h4>Vos Demandes Personnelles</h4></th>
             </tr>
             </thead>
             <tbody>
@@ -125,7 +127,9 @@
                     <td class="p-2 border-left border-right">{{ soumission.get_etat_display }}</td>
                     <td class="p-2">
                         {% if soumission.date_finis != None %}
-                            <a href="#">Noter</a>
+                            <a href="{% url "noter_soumission" soumission.id %}">Noter</a>
+                        {% else %}
+                            <a href="{% url "annuler_soumission" soumission.id %}">Annuler</a>
                         {% endif %}
                     </td>
                 </tr>
