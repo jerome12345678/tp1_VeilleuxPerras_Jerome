@@ -14,7 +14,7 @@
                             <h5>Taux - {{ professionnel.0.taux_horaire }}$ / heure</h5>
                         </div>
                         <div>
-                            <a href="{% url "ajout_soumission" professionnel.0.utilisateur_id.id %}"
+                            <a href="{% url "ajout_soumission" professionnel.0.utilisateur_id.id professionnel.0.service_id.id %}"
                                class="button btn-secondary rounded p-2">Voir Profile</a>
                         </div>
                     </div>

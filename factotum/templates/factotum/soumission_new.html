@@ -2,7 +2,8 @@
 
 {% block content %}
     <form method="POST" class="d-flex bg-light p-3 mb-2 border border-secondary"
-          action="{% url "ajout_soumission" pro %}">
+          action="{% url "ajout_soumission" pro.0 pro.1 %}">
+    {# pro #}
         {% csrf_token %}
 
         <div class="d-flex flex-column w-100">

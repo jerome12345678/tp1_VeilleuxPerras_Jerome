@@ -45,10 +45,10 @@
         </div>
     </div>
 
-    <table class="bg-light mt-3 w-100">
+    <table class="bg-light mt-4 w-100">
         <thead class="border-bottom border-secondary w-100">
         <tr class="d-flex flex-column">
-            <th><h4>Vos Demandes de Soumissions</h4></th>
+            <th><h4>Vos Demandes Personnelles</h4></th>
         </tr>
         </thead>
         <tbody>
@@ -63,7 +63,7 @@
             <td class="border-left border-secondary">Description</td>
             <td class="border-left border-secondary">État</td>
         </tr>
-        {% for soumission in soumissions %}
+        {% for soumission in soumissionsDemande %}
             <tr class="border-bottom border-secondary">
                 <td class="p-2 border-left">{{ soumission.date_planification }}</td>
                 <td class="p-2 border-left">
@@ -73,28 +73,33 @@
                         {{ soumission.date_finis }}
                     {% endif %}
                 </td>
-                <td class="p-2 border-left">{{ soumission.utilisateur.first_name }}</td>
-                <td class="p-2 border-left">{{ soumission.utilisateur.last_name }}</td>
-                <td class="p-2 border-left">{{ soumission.utilisateur.telephone }}</td>
-                <td class="p-2 border-left">{{ soumission.id_service_Professionnel.service_id.nom}}</td>
+                <td class="p-2 border-left">{{ soumission.id_service_Professionnel.utilisateur_id.first_name }}</td>
+                <td class="p-2 border-left">{{ soumission.id_service_Professionnel.utilisateur_id.last_name }}</td>
+                <td class="p-2 border-left">{{ soumission.id_service_Professionnel.utilisateur_id.telephone }}</td>
+                <td class="p-2 border-left">{{ soumission.id_service_Professionnel.service_id.nom }}</td>
                 <td class="p-2 border-left">{{ soumission.description }}</td>
                 <td class="p-2 border-left border-right">{{ soumission.get_etat_display }}</td>
                 <td class="p-2">
-                    <a href="{% url "accepter_soumission" soumission.id %}">Accepter</a>
-                    <a href="{% url "terminer_soumission" soumission.id %}">Terminer</a>
-                    <a href="{% url "annuler_soumission" soumission.id %}">Annuler</a>
+                    {% if soumission.date_finis != None %}
+                        <a href="{% url "noter_soumission" soumission.id %}"
+                            class="button btn-primary border border-secondary p-1 rounded">Noter</a>
+                    {% else %}
+                        <a href="{% url "annuler_soumission" soumission.id %}"
+                            class="button btn-primary border border-secondary p-1 rounded">Annuler</a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
         </tr>
+
         </tbody>
     </table>
 
     {% if user.role == 2 %}
-        <table class="bg-light mt-4 w-100">
+        <table class="bg-light mt-3 w-100">
             <thead class="border-bottom border-secondary w-100">
             <tr class="d-flex flex-column">
-                <th><h4>Vos Demandes Personnelles</h4></th>
+                <th><h4>Vos Demandes de Soumissions</h4></th>
             </tr>
             </thead>
             <tbody>
@@ -109,7 +114,7 @@
                 <td class="border-left border-secondary">Description</td>
                 <td class="border-left border-secondary">État</td>
             </tr>
-            {% for soumission in soumissionsDemande %}
+            {% for soumission in soumissions %}
                 <tr class="border-bottom border-secondary">
                     <td class="p-2 border-left">{{ soumission.date_planification }}</td>
                     <td class="p-2 border-left">
@@ -119,23 +124,29 @@
                             {{ soumission.date_finis }}
                         {% endif %}
                     </td>
-                    <td class="p-2 border-left">{{ soumission.id_service_Professionnel.utilisateur_id.first_name }}</td>
-                    <td class="p-2 border-left">{{ soumission.id_service_Professionnel.utilisateur_id.last_name }}</td>
-                    <td class="p-2 border-left">{{ soumission.id_service_Professionnel.utilisateur_id.telephone }}</td>
+                    <td class="p-2 border-left">{{ soumission.utilisateur.first_name }}</td>
+                    <td class="p-2 border-left">{{ soumission.utilisateur.last_name }}</td>
+                    <td class="p-2 border-left">{{ soumission.utilisateur.telephone }}</td>
                     <td class="p-2 border-left">{{ soumission.id_service_Professionnel.service_id.nom }}</td>
                     <td class="p-2 border-left">{{ soumission.description }}</td>
                     <td class="p-2 border-left border-right">{{ soumission.get_etat_display }}</td>
-                    <td class="p-2">
-                        {% if soumission.date_finis != None %}
-                            <a href="{% url "noter_soumission" soumission.id %}">Noter</a>
-                        {% else %}
-                            <a href="{% url "annuler_soumission" soumission.id %}">Annuler</a>
+                    <td class="p-2 d-flex justify-content-around">
+                        {% if soumission.etat != 4 %}
+                            {% if soumission.etat != 3 %}
+                                {% if soumission.etat != 2 %}
+                                    <a href="{% url "accepter_soumission" soumission.id %}"
+                                       class="button btn-primary border border-secondary p-1 rounded">Accepter</a>
+                                {% endif %}
+                                <a href="{% url "terminer_soumission" soumission.id %}"
+                                    class="button btn-primary border border-secondary p-1 rounded">Terminer</a>
+                                <a href="{% url "annuler_soumission" soumission.id %}"
+                                    class="button btn-primary border border-secondary p-1 rounded">Annuler</a>
+                            {% endif %}
                         {% endif %}
                     </td>
                 </tr>
             {% endfor %}
             </tr>
-
             </tbody>
         </table>
     {% endif %}

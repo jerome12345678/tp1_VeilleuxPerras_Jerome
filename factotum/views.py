@@ -24,6 +24,10 @@ def profil(request):
         if item.id_service_Professionnel.utilisateur_id.id == request.user.id:
             soumission.append(item)
 
+    for item in soumissions:
+        if item.utilisateur_id == request.user.id:
+            soumission.append(item)
+
     soumissions_demande = Soumission.objects.filter(utilisateur_id=request.user.id)
 
     services = ProfessionnelService.objects.filter(utilisateur_id=request.user.id)
@@ -120,15 +124,15 @@ def ajout_service(request, user_id):
     return render(request, 'factotum/serviceProfessionnel_new.html', {'form': form, 'allServices': allServices})
 
 
-# Vue pour ajouter créer une demande de soumission d'un utilisateur à un professionnel
+# Vue pour créer une demande de soumission d'un utilisateur à un professionnel
 @login_required(login_url='/accounts/login/')
-def ajout_soumission(request, service_id):
+def ajout_soumission(request, pro_id, service_id):
     if request.method == "POST":
         form = AjoutSoumission(request.POST)
 
         if form.is_valid():
 
-            pro = ProfessionnelService.objects.get(utilisateur_id=service_id)
+            pro = ProfessionnelService.objects.get(utilisateur_id=pro_id, service_id=service_id)
             date = form.cleaned_data['date_planification']
             description = form.cleaned_data['description']
 
@@ -142,8 +146,13 @@ def ajout_soumission(request, service_id):
     else:
         form = AjoutSoumission()
 
-    pro = ProfessionnelService.objects.get(utilisateur_id=service_id)
-    return render(request, 'factotum/soumission_new.html', {'form': form, 'pro': pro})
+    pro = ProfessionnelService.objects.get(utilisateur_id=pro_id, service_id=service_id)
+
+    index = (
+        (pro.utilisateur_id.id, service_id)
+    )
+
+    return render(request, 'factotum/soumission_new.html', {'form': form, 'pro': index})
 
 
 # Vue pour changer l'état d'une soumission à 'Accepter'
