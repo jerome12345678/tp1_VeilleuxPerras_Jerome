@@ -5,33 +5,35 @@
           action="{% url "liste_professionnel" %}">
         {% csrf_token %}
 
-        <div class="d-flex flex-column">
-            <div>
-                <label for="services">Choisissez un service</label>
+        <div class="d-flex align-items-end w-100 justify-content-center">
+            <div class="d-flex flex-column">
+                <div>
+                    <label for="services">Choisissez un service</label>
+                </div>
+                <div>
+                    <select name="services" id="services" required>
+                        {% for service in services %}
+                            <option value="{{ service.id }}">{{ service.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-            <div>
-                <select name="services" id="services" required>
-                    {% for service in services %}
-                        <option value="{{ service.id }}">{{ service.nom }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
 
-        <div class="d-flex flex-column">
-            <div>
-                <label for="code_postal">Code Postal</label>
+            <div class="d-flex flex-column ml-5 mr-5">
+                <div>
+                    <label for="code_postal">Code Postal</label>
+                </div>
+                <div>
+                    <input type="text" name="code_postal" id="code_postal" required>
+                </div>
+                <div class="text-danger">
+                    {{ form.errors }}
+                </div>
             </div>
-            <div>
-                <input type="text" name="code_postal" id="code_postal" required>
-            </div>
-            <div class="text-danger">
-                {{ form.errors }}
-            </div>
-        </div>
 
-        <div>
-            <input type="submit" value="Soumettre">
+            <div>
+                <input type="submit" value="Soumettre">
+            </div>
         </div>
     </form>
 {% endblock %}

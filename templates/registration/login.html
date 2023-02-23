@@ -3,29 +3,27 @@
 {% block content %}
     <form method="POST" novalidate>
         {% csrf_token %}
+        <div class="d-flex w-100 col-10 offset-1 mt-4">
+            <div class="d-flex flex-column">
+                {% for field in form.visible_fields %}
+                    <div class="mt-2">
+                        <div class="text-danger">
+                            {{ field.errors }}
+                        </div>
 
-        <div class="d-flex flex-column">
+                        <label class="text-dark" for="{{ field.id_for_label }}">
+                            {{ field.label_tag }}
+                        </label>
 
-
-
-            {% for field in form.visible_fields %}
-                <div>
-                    <div class="text-danger">
-                        {{ field.errors }}
+                        {{ field }}
                     </div>
-
-                    {# comment ajouter message validation si donné erronée #}
-
-                    <label class="text-dark" for="{{ field.id_for_label }}">
-                        {{ field.label_tag }}
-                    </label>
-
-                    {{ field }}
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
 
-        <input type="submit" value="Soumettre">
+        <div class="d-flex w-100 col-10 offset-1 mt-2">
+            <input type="submit" value="Soumettre">
+            <a href="{% url "register" %}" class="button btn-light p-1 rounded ml-3 border border-secondary">s'inscrire</a>
+        </div>
     </form>
-    <a href="{% url "register" %}">s'inscrire</a>
 {% endblock %}

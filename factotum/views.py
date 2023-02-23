@@ -10,11 +10,12 @@ import urllib.request
 import json
 
 
-# Create your views here.
+# Vue de départ, initialise la base sur quoi tout les templates seront redirigé
 def index(request):
     return render(request, 'factotum/base.html')
 
 
+# Vue pour la page de profil d'un utilisateur
 @login_required(login_url='/accounts/login/')
 def profil(request):
     soumissions = Soumission.objects.all()
@@ -23,15 +24,16 @@ def profil(request):
         if item.id_service_Professionnel.utilisateur_id.id == request.user.id:
             soumission.append(item)
 
-    soumissionsDemande = Soumission.objects.filter(utilisateur_id=request.user.id)
+    soumissions_demande = Soumission.objects.filter(utilisateur_id=request.user.id)
 
     services = ProfessionnelService.objects.filter(utilisateur_id=request.user.id)
 
     return render(request, 'factotum/profil_details.html', {'soumissions': soumission,
-                                                            'soumissionsDemande': soumissionsDemande,
+                                                            'soumissionsDemande': soumissions_demande,
                                                             'user_services': services})
 
 
+# Vue pour créer un nouveau compte
 def register(request):
     if request.method == "POST":
         form = RegisterForm(data=request.POST, files=request.FILES)
@@ -51,6 +53,7 @@ def register(request):
     return render(request, "registration/register.html", {"form": form})
 
 
+# Vue qui affiche la liste de professionnel à la suite d'une recherche
 def liste_professionnel(request):
     list_pro = []
     api_key = settings.API_KEY
@@ -73,14 +76,14 @@ def liste_professionnel(request):
                 for proNote in notes:
                     total = total + proNote.note
 
-                res = urllib.request.urlopen('http://www.zipcodeapi.com/rest/v2/CA/' + api_key + '/distance.json/' + code_postal.replace(' ', '') + '/' + pro.utilisateur_id.code_Postal.replace(' ', '') + '/km')
+                res = urllib.request.urlopen('http://www.zipcodeapi.com/rest/v2/CA/' + api_key +
+                                             '/distance.json/' + code_postal.replace(' ', '') +
+                                             '/' + pro.utilisateur_id.code_Postal.replace(' ', '') + '/km')
                 json_data = json.load(res)
 
                 result = (
                     (pro, json_data['distance'], total)
                 )
-
-                #result = (pro, 54)
 
                 list_pro.append(result)
                 list_pro.sort(key=lambda a: a[1])
@@ -94,6 +97,7 @@ def liste_professionnel(request):
     return render(request, 'factotum/recherche.html', {'form': form, 'services': allServices})
 
 
+# Vue pour ajouter un service à un utilisateur professionnel
 @login_required(login_url='/accounts/login/')
 def ajout_service(request, user_id):
     allServices = Service.objects.all()
@@ -116,6 +120,7 @@ def ajout_service(request, user_id):
     return render(request, 'factotum/serviceProfessionnel_new.html', {'form': form, 'allServices': allServices})
 
 
+# Vue pour ajouter créer une demande de soumission d'un utilisateur à un professionnel
 @login_required(login_url='/accounts/login/')
 def ajout_soumission(request, service_id):
     if request.method == "POST":
@@ -141,6 +146,7 @@ def ajout_soumission(request, service_id):
     return render(request, 'factotum/soumission_new.html', {'form': form, 'pro': pro})
 
 
+# Vue pour changer l'état d'une soumission à 'Accepter'
 def accepter_soumission(request, soumission_id):
     soumission = Soumission.objects.get(id=soumission_id)
     soumission.etat = 2
@@ -161,6 +167,7 @@ def accepter_soumission(request, soumission_id):
                                                             'user_services': services})
 
 
+# Vue pour changer l'état d'une soumission à 'Terminer'
 def terminer_soumission(request, soumission_id):
     soumission = Soumission.objects.get(id=soumission_id)
     soumission.etat = 3
@@ -182,6 +189,7 @@ def terminer_soumission(request, soumission_id):
                                                             'user_services': services})
 
 
+# Vue pour changer l'état d'une soumission à Annuler
 def annuler_soumission(request, soumission_id):
     soumission = Soumission.objects.get(id=soumission_id)
     soumission.etat = 4
@@ -201,6 +209,7 @@ def annuler_soumission(request, soumission_id):
                                                             'soumissionsDemande': soumissionsDemande,
                                                             'user_services': services})
 
+# Vue pour noter une soumission lorsque terminé (incomplète)
 def noter_soumission(request, soumission_id):
     soumission = Soumission.objects.get(id=soumission_id)
     soumission.note = soumission.note + 1
@@ -219,5 +228,3 @@ def noter_soumission(request, soumission_id):
     return render(request, 'factotum/profil_details.html', {'soumissions': soumission,
                                                             'soumissionsDemande': soumissionsDemande,
                                                             'user_services': services})
-
-
